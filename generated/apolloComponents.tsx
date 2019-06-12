@@ -1,5 +1,9 @@
 export type Maybe<T> = T | null;
 
+export interface PodcastInput {
+  podcastUrls: string[];
+}
+
 export interface ProductInput {
   name: string;
 }
@@ -24,12 +28,127 @@ export interface PasswordInput {
   password: string;
 }
 
+/** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
+export type DateTime = any;
+
 /** The `Upload` scalar type represents a file upload. */
 export type Upload = any;
 
 // ====================================================
 // Documents
 // ====================================================
+
+export type CreatePodcastVariables = {
+  data: PodcastInput;
+};
+
+export type CreatePodcastMutation = {
+  __typename?: "Mutation";
+
+  createPodcast: CreatePodcastCreatePodcast[];
+};
+
+export type CreatePodcastCreatePodcast = {
+  __typename?: "Podcast";
+
+  id: string;
+
+  name: Maybe<string>;
+
+  image: string;
+
+  title: Maybe<string>;
+
+  feedLink: string;
+
+  episodes: Maybe<CreatePodcastEpisodes[]>;
+};
+
+export type CreatePodcastEpisodes = {
+  __typename?: "PodcastEpisode";
+
+  id: Maybe<string>;
+
+  url: string;
+
+  text: string;
+
+  date: DateTime;
+};
+
+export type GetAllPodcastsVariables = {};
+
+export type GetAllPodcastsQuery = {
+  __typename?: "Query";
+
+  getAllPodcasts: GetAllPodcastsGetAllPodcasts;
+};
+
+export type GetAllPodcastsGetAllPodcasts = {
+  __typename?: "Podcast";
+
+  id: string;
+
+  name: Maybe<string>;
+
+  image: string;
+
+  title: Maybe<string>;
+
+  feedLink: string;
+
+  episodes: Maybe<GetAllPodcastsEpisodes[]>;
+};
+
+export type GetAllPodcastsEpisodes = {
+  __typename?: "PodcastEpisode";
+
+  id: Maybe<string>;
+
+  url: string;
+
+  text: string;
+
+  date: DateTime;
+};
+
+export type GetOnePodcastVariables = {
+  name: string;
+};
+
+export type GetOnePodcastQuery = {
+  __typename?: "Query";
+
+  getOnePodcast: GetOnePodcastGetOnePodcast;
+};
+
+export type GetOnePodcastGetOnePodcast = {
+  __typename?: "Podcast";
+
+  id: string;
+
+  name: Maybe<string>;
+
+  image: string;
+
+  title: Maybe<string>;
+
+  feedLink: string;
+
+  episodes: Maybe<GetOnePodcastEpisodes[]>;
+};
+
+export type GetOnePodcastEpisodes = {
+  __typename?: "PodcastEpisode";
+
+  id: Maybe<string>;
+
+  url: string;
+
+  text: string;
+
+  date: DateTime;
+};
 
 export type ChangePasswordVariables = {
   data: ChangePasswordInput;
@@ -171,6 +290,162 @@ import gql from "graphql-tag";
 // Components
 // ====================================================
 
+export const CreatePodcastDocument = gql`
+  mutation CreatePodcast($data: PodcastInput!) {
+    createPodcast(data: $data) {
+      id
+      name
+      image
+      title
+      feedLink
+      episodes {
+        id
+        url
+        text
+        date
+      }
+    }
+  }
+`;
+export class CreatePodcastComponent extends React.Component<
+  Partial<
+    ReactApollo.MutationProps<CreatePodcastMutation, CreatePodcastVariables>
+  >
+> {
+  render() {
+    return (
+      <ReactApollo.Mutation<CreatePodcastMutation, CreatePodcastVariables>
+        mutation={CreatePodcastDocument}
+        {...(this as any)["props"] as any}
+      />
+    );
+  }
+}
+export type CreatePodcastProps<TChildProps = any> = Partial<
+  ReactApollo.MutateProps<CreatePodcastMutation, CreatePodcastVariables>
+> &
+  TChildProps;
+export type CreatePodcastMutationFn = ReactApollo.MutationFn<
+  CreatePodcastMutation,
+  CreatePodcastVariables
+>;
+export function CreatePodcastHOC<TProps, TChildProps = any>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        CreatePodcastMutation,
+        CreatePodcastVariables,
+        CreatePodcastProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.graphql<
+    TProps,
+    CreatePodcastMutation,
+    CreatePodcastVariables,
+    CreatePodcastProps<TChildProps>
+  >(CreatePodcastDocument, operationOptions);
+}
+export const GetAllPodcastsDocument = gql`
+  query GetAllPodcasts {
+    getAllPodcasts {
+      id
+      name
+      image
+      title
+      feedLink
+      episodes {
+        id
+        url
+        text
+        date
+      }
+    }
+  }
+`;
+export class GetAllPodcastsComponent extends React.Component<
+  Partial<ReactApollo.QueryProps<GetAllPodcastsQuery, GetAllPodcastsVariables>>
+> {
+  render() {
+    return (
+      <ReactApollo.Query<GetAllPodcastsQuery, GetAllPodcastsVariables>
+        query={GetAllPodcastsDocument}
+        {...(this as any)["props"] as any}
+      />
+    );
+  }
+}
+export type GetAllPodcastsProps<TChildProps = any> = Partial<
+  ReactApollo.DataProps<GetAllPodcastsQuery, GetAllPodcastsVariables>
+> &
+  TChildProps;
+export function GetAllPodcastsHOC<TProps, TChildProps = any>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        GetAllPodcastsQuery,
+        GetAllPodcastsVariables,
+        GetAllPodcastsProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.graphql<
+    TProps,
+    GetAllPodcastsQuery,
+    GetAllPodcastsVariables,
+    GetAllPodcastsProps<TChildProps>
+  >(GetAllPodcastsDocument, operationOptions);
+}
+export const GetOnePodcastDocument = gql`
+  query GetOnePodcast($name: String!) {
+    getOnePodcast(name: $name) {
+      id
+      name
+      image
+      title
+      feedLink
+      episodes {
+        id
+        url
+        text
+        date
+      }
+    }
+  }
+`;
+export class GetOnePodcastComponent extends React.Component<
+  Partial<ReactApollo.QueryProps<GetOnePodcastQuery, GetOnePodcastVariables>>
+> {
+  render() {
+    return (
+      <ReactApollo.Query<GetOnePodcastQuery, GetOnePodcastVariables>
+        query={GetOnePodcastDocument}
+        {...(this as any)["props"] as any}
+      />
+    );
+  }
+}
+export type GetOnePodcastProps<TChildProps = any> = Partial<
+  ReactApollo.DataProps<GetOnePodcastQuery, GetOnePodcastVariables>
+> &
+  TChildProps;
+export function GetOnePodcastHOC<TProps, TChildProps = any>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        GetOnePodcastQuery,
+        GetOnePodcastVariables,
+        GetOnePodcastProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.graphql<
+    TProps,
+    GetOnePodcastQuery,
+    GetOnePodcastVariables,
+    GetOnePodcastProps<TChildProps>
+  >(GetOnePodcastDocument, operationOptions);
+}
 export const ChangePasswordDocument = gql`
   mutation ChangePassword($data: ChangePasswordInput!) {
     changePassword(data: $data) {

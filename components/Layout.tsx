@@ -35,13 +35,7 @@ const Layout: React.FunctionComponent<Props> = ({
   children,
   title = "This is the default title"
 }) => (
-  <Flex
-    // border="3px crimson solid"
-    m={[0]}
-    minHeight="100vh"
-    flexDirection="column"
-    width={[1]}
-  >
+  <Flex m={[0]} minHeight="100vh" flexDirection="column" width={[1]}>
     <Head>
       <title>{title}</title>
       <meta charSet="utf-8" />
