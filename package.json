@@ -1,5 +1,5 @@
 {
-  "name": "atlas-travel-demo",
+  "name": "media-scraper-client",
   "version": "1.0.0",
   "scripts": {
     "dev": "nodemon -r dotenv/config --exec ts-node --project tsconfig.server.json server/index.ts",
