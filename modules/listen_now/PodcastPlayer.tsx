@@ -14,6 +14,9 @@ import BottomButtons from "./BottomButtons";
 import ListOfPodcasts from "./ListOfPodcasts";
 import { IPodcastPlayerProps, IPodcastPlayerState } from "./types";
 import PlayerPopUp from "./PlayerPopUp";
+import { isBrowser } from "../../lib/isBrowser";
+
+// import OPEN_FLOOR from "../../static/audio/openfloor.mp3";
 
 const buttonItems = [
   {
@@ -34,12 +37,25 @@ const buttonItems = [
   }
 ];
 
+const host = isBrowser ? window.location.host : "";
+
+const prefix = "http://";
+
+// const pathnamer = "http://localhost:8888/static/audio/openfloor.mp3";
+
+const pathnamer = "OPEN_FLOOR";
+
 const initialState = {
   episodeLink: "",
   episodeInfo: "",
   playerStatus: "paused",
   playerVisibility: "small",
-  currentPlayingIndex: null
+  currentPlayingIndex: null,
+  audioToPlay: ["http://localhost:8888/static/audio/openfloor.mp3"],
+  playStatus: "PLAYING",
+  imageUrl:
+    "https://pbcdn1.podbean.com/imglogo/dir-logo/383865/383865_300x300.jpeg",
+  soundLabel: ""
 };
 
 export default class PodcastPlayer extends Component<
@@ -49,28 +65,79 @@ export default class PodcastPlayer extends Component<
   constructor(props: IPodcastPlayerProps) {
     super(props);
 
+    this.handlePlayMedia = this.handlePlayMedia.bind(this);
     this.handlePlayerToggle = this.handlePlayerToggle.bind(this);
+    this.handleSeekForward = this.handleSeekForward.bind(this);
+    this.handleSeekBackward = this.handleSeekBackward.bind(this);
+    // this.handleIncreasePlayback = this.handleIncreasePlayback.bind(this);
+
+    this.audioRef = React.createRef();
 
     this.state = {
+      audioToPlay: initialState.audioToPlay,
       episodeLink: initialState.episodeLink,
       episodeInfo: initialState.episodeInfo,
       playerStatus: initialState.playerStatus,
       playerVisibility: initialState.playerVisibility,
-      currentPlayingIndex: initialState.currentPlayingIndex
+      currentPlayingIndex: initialState.currentPlayingIndex,
+      imageUrl: initialState.imageUrl
     };
   }
 
   handlePlayerToggle(event: React.MouseEvent) {
-    console.log(event.target.id);
+    // console.log(event.target.id);
     this.setState(prevState => ({
       playerVisibility:
         prevState.playerVisibility === "small" ? "large" : "small"
     }));
   }
 
+  handlePlayMedia(event: React.MouseEvent) {
+    console.log("PODCAST PLAYING");
+    console.log(event);
+    console.log(this.audioRef.current);
+    if (this.state.playerStatus === "isPlaying") {
+      this.setState({ playerStatus: "paused" });
+      this.audioRef.current.pause();
+    }
+    if (this.state.playerStatus === "paused") {
+      this.setState({ playerStatus: "isPlaying" });
+      this.audioRef.current.play();
+    }
+  }
+
+  //   handleIncreasePlayback(){
+
+  //     // audio
+  //     this.audioRef.current.playbackRate = 1.0;
+  //   }
+
+  handleSeekForward(event: any) {
+    console.log(this.audioRef.current.currentTime);
+    const newTime = 30 + this.audioRef.current.currentTime;
+
+    this.audioRef.current.currentTime = newTime;
+    this.audioRef.current.play().catch(error => console.log(error.message));
+  }
+
+  handleSeekBackward(event: any) {
+    const newTime = Math.floor(this.audioRef.current.currentTime - 15);
+    console.log("newTime");
+    console.log(newTime);
+    this.audioRef.current.currentTime = newTime;
+    this.audioRef.current.play().catch(error => console.log(error.message));
+  }
+
   render() {
     return (
       <Layout title="Listen Now">
+        <audio
+          type="audio/mp3"
+          ref={this.audioRef}
+          src={this.state.audioToPlay}
+          //   src={this.state.audioToPlay[0]}
+          style={{ display: "none" }}
+        />
         <FlexMax
           minHeight="100vh"
           alignItems="center"
@@ -96,6 +163,7 @@ export default class PodcastPlayer extends Component<
                   </Text>
 
                   <ListOfPodcasts
+                    handlePlayMedia={this.handlePlayMedia}
                     getAllPodcasts={dataGetAllPodcasts.getAllPodcasts}
                   />
                 </>
@@ -104,12 +172,12 @@ export default class PodcastPlayer extends Component<
           </GetAllPodcastsComponent>
 
           <AbWrapper
-            width={[1]}
+            width={[1, "860px"]}
             // top={80}
-            // border="2px crimson dotted"
+            border="2px crimson dotted"
             bg="#eee"
             flexDirection="column"
-            alignItems="flex-end"
+            alignItems="center"
             position="fixed"
             bottom={0}
           >
@@ -118,7 +186,7 @@ export default class PodcastPlayer extends Component<
                 border="lime"
                 mb={3}
                 mt={1}
-                width={[1, "860px"]}
+                width={[1]}
                 justifyContent="center"
                 flexwrap="nowrap"
               >
@@ -134,15 +202,17 @@ export default class PodcastPlayer extends Component<
             ) : (
               ""
             )}
-            {this.state.playerStatus === "paused" ? (
-              <PlayerPopUp
-                currentPlayingIndex={this.state.currentPlayingIndex}
-                handlePlayerToggle={this.handlePlayerToggle}
-                playerVisibility={this.state.playerVisibility}
-              />
-            ) : (
-              ""
-            )}
+
+            <PlayerPopUp
+              imageUrl={this.state.imageUrl}
+              playerStatus={this.state.playerStatus}
+              currentPlayingIndex={this.state.currentPlayingIndex}
+              playerVisibility={this.state.playerVisibility}
+              handlePlayerToggle={this.handlePlayerToggle}
+              handlePlayMedia={this.handlePlayMedia}
+              handleSeekForward={this.handleSeekForward}
+              handleSeekBackward={this.handleSeekBackward}
+            />
 
             <Flex
               border="lime"

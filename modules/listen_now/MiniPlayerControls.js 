@@ -1,0 +1,33 @@
+
+<>
+          <Flex
+            onClick={handlePlayerToggle}
+            justifyContent="center"
+            flexDirection="column"
+            border="crimson"
+            width={3 / 5}
+          >
+            <Text fontSize=".8em">text</Text>
+            <Text fontSize=".8em"> more text</Text>
+            <Text fontSize=".8em">blah</Text>
+            {currentPlayingIndex}
+          </Flex>
+          <Flex
+            alignItems="center"
+            justifyContent="center"
+            flexDirection="column"
+            border="crimson"
+            width={1 / 10}
+          >
+            <Icon name="play" fill="brown" />
+          </Flex>
+          <Flex
+            alignItems="center"
+            justifyContent="center"
+            flexDirection="column"
+            border="crimson"
+            width={1 / 10}
+          >
+            <Icon name="refresh" fill="brown" />
+          </Flex>
+        </>

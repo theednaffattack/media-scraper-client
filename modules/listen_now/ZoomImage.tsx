@@ -2,8 +2,6 @@ import React from "react";
 import posed from "react-pose";
 import styled from "styled-components";
 
-import { Image } from "../../components/BaseElements";
-
 export interface IZoomImageProps {
   imageWidth: string | number;
   imageHeight: string | number;
@@ -19,6 +17,13 @@ const PrepImage = styled.img`
   max-height: 100%; */
 `;
 
+const PrepDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  position: static;
+`;
+
 const transition = {
   duration: 400,
   ease: [0.08, 0.69, 0.2, 0.99]
@@ -27,18 +32,19 @@ const transition = {
 const animationConfig = {
   zoomedIn: {
     // applyAtEnd: { position: "fixed" },
-    position: "fixed",
-    // top: 0,
+    position: "absolute",
+    // left: "25%",
     // left: 0,
-    // bottom: 0,
     // right: 0,
-    width: "200px",
+    // bottom: 0,
+    // width: "100%",
     flip: true,
-    transition
+    transition,
     // zIndex: 9999,
 
     // width: "auto",
-    // height: "auto"
+    // height: "auto",
+    maxHeight: "250px"
   },
   zoomedOut: {
     position: "static",
@@ -52,6 +58,8 @@ const animationConfig = {
   }
 };
 
+const PosedFlex = posed(PrepDiv)(animationConfig);
+
 const MyImage = posed.img(animationConfig);
 
 class ZoomImage extends React.Component<IZoomImageProps> {
@@ -61,20 +69,25 @@ class ZoomImage extends React.Component<IZoomImageProps> {
       imageHeight,
       src,
       playerVisibility,
+      width,
       ...props
     } = this.props;
 
     return (
-      <div
-        className="image-frame"
+      <PosedFlex
+        pose={playerVisibility === "large" ? "zoomedIn" : "zoomedOut"}
+        width="55px"
+        // maxHeight="200px"
+        // flexDirection="column"
+        // className="image-frame"
+        // border="2px pink solid"
+        // position="relative"
+        // width={1}
         // style={{ width: imageWidth, height: imageHeight }}
       >
-        {playerVisibility}
-        <MyImage
-          pose={playerVisibility === "large" ? "zoomedIn" : "zoomedOut"}
-          src={src}
-        />
-      </div>
+        <MyImage height="100%" src={src} />
+        {/* <Image src={src} /> */}
+      </PosedFlex>
     );
   }
 }

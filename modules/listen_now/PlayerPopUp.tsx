@@ -14,16 +14,27 @@ export interface PlayerPopUpProps {
   playerVisibility: string;
   handlePlayerToggle: any;
   currentPlayingIndex: null | number;
+  handlePlayMedia: any;
+  playerStatus: string;
+  imageUrl: string;
+
+  handleSeekForward: any;
+  handleSeekBackward: any;
 }
 
 function PlayerPopUp({
+  handleSeekForward,
+  handleSeekBackward,
   handlePlayerToggle,
   playerVisibility,
-  currentPlayingIndex
+  currentPlayingIndex,
+  handlePlayMedia,
+  playerStatus,
+  imageUrl
 }: PlayerPopUpProps) {
   return (
     <PMinHeightFlex
-      width={1}
+      width={[1]}
       alignItems="center"
       border="rebeccapurple"
       pose={playerVisibility === "large" ? "large" : "small"}
@@ -35,9 +46,14 @@ function PlayerPopUp({
       //   }}
     >
       <MiniPlayer
+        handleSeekForward={handleSeekForward}
+        handleSeekBackward={handleSeekBackward}
+        imageUrl={imageUrl}
+        playerStatus={playerStatus}
         playerVisibility={playerVisibility}
         currentPlayingIndex={currentPlayingIndex}
         handlePlayerToggle={handlePlayerToggle}
+        handlePlayMedia={handlePlayMedia}
       />
     </PMinHeightFlex>
   );

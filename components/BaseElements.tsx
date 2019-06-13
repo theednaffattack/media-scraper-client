@@ -5,6 +5,7 @@ import {
   backgroundImage,
   borders,
   display,
+  maxHeight,
   maxWidth,
   minHeight,
   minWidth,
@@ -20,6 +21,13 @@ export { Button, Image, Text };
 
 export const Box = styled(BoxBase)`
   ${borders}
+`;
+
+export const MaxHeightFlex = styled(FlexBase)`
+  ${borders}
+  ${display}
+  ${maxHeight}
+  ${position}
 `;
 
 export const MinHeightFlex = styled(FlexBase)`

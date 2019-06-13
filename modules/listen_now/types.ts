@@ -20,6 +20,8 @@ export interface IPodcastPlayerState {
   playerVisibility: string;
   currentPlayingIndex: null | number;
   episodeInfo: string;
+  audioToPlay: string[];
+  imageUrl: string;
 }
 
 export interface IPodcastPlayerProps {
